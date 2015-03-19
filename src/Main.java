@@ -1,13 +1,19 @@
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GLContext;
 
+import Game.Coin;
+import Game.Tile;
+import Graphics.Shader;
 import Input.Input;
+import Math.Matrix4f;
+import Math.Vector3f;
 
 public class Main implements Runnable{
 	
@@ -17,6 +23,11 @@ public class Main implements Runnable{
 	private long window;
 	
 	private int width = 1200, height = 800;
+	
+	public Tile tile;
+	public Coin[] coins = new Coin[5];
+	
+	private GLFWKeyCallback keyCallback;	
 	
 	public static void main(String args[]){
 		Main game = new Main();
@@ -63,7 +74,7 @@ public class Main implements Runnable{
 		glfwSetWindowPos(window, 100, 100);
 		
 		// Sets our keycallback to equal our newly created Input class()
-		glfwSetKeyCallback(window, new Input());
+		glfwSetKeyCallback(window, keyCallback = new Input());
 		
 		// Sets the context of GLFW, this is vital for our program to work.
 		glfwMakeContextCurrent(window);
@@ -76,20 +87,46 @@ public class Main implements Runnable{
 		GLContext.createFromCurrent();
 		
 		// Clears color buffers and gives us a nice color background.
-		glClearColor(0.56f, 0.258f, 0.425f, 1.0f);
+		glClearColor(0.3f,0.7f,0.92f,1.0f);
+		
+		
+		glActiveTexture(GL_TEXTURE1);
+		
 		// Enables depth testing which will be important to make sure
 		// triangles are not rendering in front of each other when they
 		// shouldn't be.
 		glEnable(GL_DEPTH_TEST);
+		
 		// Prints out the current OpenGL version to the console.
 		System.out.println("OpenGL: " + glGetString(GL_VERSION));
 		
+		Shader.loadAll();
+		
+		
+		Shader.shader1.enable();
+		Matrix4f pr_matrix = Matrix4f.orthographic(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
+		
+		Shader.shader1.setUniformMat4f("pr_matrix", pr_matrix);
+		Shader.shader1.setUniform1i("tex", 1);
+	
+		Shader.shader1.disable();
+	
+		for(int i = 0; i<5; i++){
+			coins[i] = new Coin();
+			coins[i].translate(new Vector3f(i * 1.7f, 0.0f ,0.0f));
+		}
+		
+		tile = new Tile();
 	}
 	
 	public void update(){
 		// Polls for any window events such as the window closing etc.
 		glfwPollEvents();
 		
+//		player1.update();
+		tile.update();
+		for(int i = 0; i<coins.length; i++)
+			coins[i].update();
 		// tests to see if the GLFW_KEY_SPACE key is currently pressed
 		// this returns a true value for our If statement when it is pressed
 		// and as a result prints out our console message.
@@ -103,6 +140,15 @@ public class Main implements Runnable{
 		// 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		tile.render();
+		for(int i = 0; i<coins.length; i++){
+			coins[i].render();
+		}
+//		player2.render();
+		int i = glGetError();
+		if(i != GL_NO_ERROR)
+			System.out.println(i);
+		
 		// Swaps out our buffers
 		glfwSwapBuffers(window);
 	}
@@ -112,17 +158,37 @@ public class Main implements Runnable{
 		// All our initialization code
 		init();
 		// Our main game loop
-		while(running){
-			update();
-			render();
-			// Checks to see if either the escape button or the
-			// red cross at the top were pressed.
-			// if so sets our boolean to false and closes the
-			// thread.
-			if(glfwWindowShouldClose(window) == GL_TRUE){
-				running = false;
+
+		long lastTime = System.nanoTime();
+		double delta = 0.0;
+		double ns = 1000000000.0 / 60.0;
+		long timer = System.currentTimeMillis();
+		int updates = 0;
+		int frames = 0;
+		while (running) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			if (delta >= 1.0) {
+				update();
+				updates++;
+				delta--;
 			}
+			render();
+			frames++;
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				System.out.println(updates + " ups, " + frames + " fps");
+				updates = 0;
+				frames = 0;
+			}
+			if (glfwWindowShouldClose(window) == GL_TRUE)
+				running = false;
 		}
+		
+		keyCallback.release();
+		glfwDestroyWindow(window);
+		glfwTerminate();
 	}
 	
 	
