@@ -56,6 +56,10 @@ public class Texture {
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}
 	
+	public void setTex(int i){
+		glBindTexture(GL_TEXTURE_2D, texture);
+	}
+	
 	public void unbind(){
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

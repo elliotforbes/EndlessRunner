@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GLContext;
 
 import Game.Coin;
+import Game.Player;
 import Game.Tile;
 import Graphics.Shader;
 import Input.Input;
@@ -26,12 +27,17 @@ public class Main implements Runnable{
 	
 	public Tile tile;
 	public Coin[] coins = new Coin[5];
+	public Player player1;
+	
 	
 	private GLFWKeyCallback keyCallback;	
 	
 	public static void main(String args[]){
+		
 		Main game = new Main();
 		game.start();
+		
+		
 	}
 	
 	public void start(){
@@ -117,6 +123,8 @@ public class Main implements Runnable{
 		}
 		
 		tile = new Tile();
+		player1 = new Player();
+		player1.translate(new Vector3f(-8.0f, -2.8f, 0.0f));
 	}
 	
 	public void update(){
@@ -125,14 +133,12 @@ public class Main implements Runnable{
 		
 //		player1.update();
 		tile.update();
+		player1.update();
 		for(int i = 0; i<coins.length; i++)
 			coins[i].update();
 		// tests to see if the GLFW_KEY_SPACE key is currently pressed
 		// this returns a true value for our If statement when it is pressed
 		// and as a result prints out our console message.
-		if(Input.keys[GLFW_KEY_SPACE]){
-			System.out.println("Space Key Pressed!");
-		}
 		
 	}
 	
@@ -141,6 +147,7 @@ public class Main implements Runnable{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		tile.render();
+		player1.render();
 		for(int i = 0; i<coins.length; i++){
 			coins[i].render();
 		}

@@ -29,21 +29,25 @@ public class Tile extends GameObject{
 			2,3,0
 	};
 	
+	private static String[] texPaths = new String[]{
+		"assets/tile.png"
+	};
+	
 	public Tile() {
-		super(vertices, indices, texCoords, "assets/tile.png");
+		super(vertices, indices, texCoords, texPaths);
 		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void render(){
-		tex.bind();
+		tex[0].bind();
 		Shader.shader1.enable();
 		for(int i = 0; i< 20; i++){
 			Shader.shader1.setUniformMat4f("ml_matrix", Matrix4f.translate(new Vector3f(-10.0f + (i + 1.0f), -4.7f, 0.0f)));
 			VAO.render();
 		}
 		Shader.shader1.disable();
-		tex.unbind();
+		tex[0].unbind();
 	}
 	
 }

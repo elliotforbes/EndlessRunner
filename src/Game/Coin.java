@@ -29,8 +29,12 @@ public class Coin extends GameObject{
 			2,3,0
 	};
 	
+	private static String[] texPaths = new String[]{
+		"assets/coin2.png"
+	};
+	
 	public Coin() {
-		super(vertices, indices, texCoords, "assets/coin2.png");
+		super(vertices, indices, texCoords, texPaths);
 		// TODO Auto-generated constructor stub
 		super.translate(new Vector3f(0.0f, -2.4f, 0.0f));
 	}
@@ -41,14 +45,5 @@ public class Coin extends GameObject{
 		delta += 0.1f;
 	}
 	
-	@Override
-	public void render(){
-		tex.bind();
-		Shader.shader1.enable();
-		Shader.shader1.setUniformMat4f("ml_matrix", Matrix4f.translate(position));
-		VAO.render();
-		Shader.shader1.disable();
-		tex.unbind();
-	}
 
 }

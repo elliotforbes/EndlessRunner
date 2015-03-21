@@ -23,5 +23,9 @@ public class Input extends GLFWKeyCallback{
 		return keys[keycode];
 	}
 	
+	public static boolean isKeyUp(int keycode){
+		return keys[keycode];
+	}
+	
 	
 }
