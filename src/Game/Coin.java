@@ -10,6 +10,8 @@ public class Coin extends GameObject{
 
 	public static float height = 0.5f;
 	
+	public boolean alive = true;
+	
 	private static float[] vertices = new float[]{
 			-width, -height, 0.2f,
 			-width,  height, 0.2f,
