@@ -1,8 +1,11 @@
 package Game;
 
+import Math.Matrix4f;
 import Math.Vector3f;
 
 public class Game {
+	
+	public Camera camera = new Camera();
 	
 	public Tile tile;
 	public Coin[] coins = new Coin[5];
@@ -21,6 +24,7 @@ public class Game {
 		tile = new Tile();
 		player1 = new Player();
 		player1.translate(new Vector3f(-8.0f, -3.6f, 0.0f));
+//		camera.setPosition();
 	}
 	
 	public boolean collision(){
@@ -80,13 +84,15 @@ public class Game {
 		
 		tile.update();
 		player1.update();
-		
+		camera.setPosition(player1.position);
 		
 		for(int i = 0; i<coins.length; i++)
 			coins[i].update();
 	}
 	
 	public void render(){
+
+		camera.render();
 		tile.render();
 		player1.render();
 		for(int i = 0; i<coins.length; i++){

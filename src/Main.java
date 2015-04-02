@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GLContext;
 
+import Game.Camera;
 import Game.Coin;
 import Game.Game;
 import Game.Player;
@@ -27,7 +28,7 @@ public class Main implements Runnable{
 	private int width = 1200, height = 800;
 	
 	public Game game;
-	
+
 	private GLFWKeyCallback keyCallback;	
 	
 	public static void main(String args[]){
@@ -75,7 +76,7 @@ public class Main implements Runnable{
 		// to see what the primary monitor is. 
 		ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		// Sets the initial position of our game window. 
-		glfwSetWindowPos(window, 100, 100);
+		glfwSetWindowPos(window, 2200, 100);
 		
 		// Sets our keycallback to equal our newly created Input class()
 		glfwSetKeyCallback(window, keyCallback = new Input());
@@ -106,16 +107,18 @@ public class Main implements Runnable{
 		
 		Shader.loadAll();
 		
+		game = new Game();
 		
 		Shader.shader1.enable();
 		Matrix4f pr_matrix = Matrix4f.orthographic(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
-		
+	
 		Shader.shader1.setUniformMat4f("pr_matrix", pr_matrix);
 		Shader.shader1.setUniform1i("tex", 1);
-	
+		
 		Shader.shader1.disable();
 		
-		game = new Game();
+		
+		
 		
 	}
 	
