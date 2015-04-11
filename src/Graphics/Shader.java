@@ -26,6 +26,7 @@ public class Shader {
     private boolean enabled = false;
     
     public static Shader shader1;
+    public static Shader shader2;
 	
 	public Shader(String vertex, String fragment){
 		ID = ShaderUtils.load(vertex, fragment);
@@ -45,6 +46,7 @@ public class Shader {
 	
 	public static void loadAll(){
 		shader1 = new Shader("shaders/bg.vert", "shaders/bg.frag");
+		shader2 = new Shader("shaders/shader2.vert", "shaders/shader2.frag");
 	}
 	
 	public static void loadShader(String vertShader, String fragShader){

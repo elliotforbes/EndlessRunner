@@ -11,12 +11,17 @@ public class Input extends GLFWKeyCallback{
 
 	// a boolean array of all our keys. 
 	public static boolean[] keys = new boolean[65535];
+	public static boolean[] pKeys = new boolean[65535];
 	
 	// Overrides GLFW's own implementation of the Invoke method
 	// This gets called everytime a key is pressed.
 	@Override
 	public void invoke(long window, int key, int scancode, int action, int mods) {
 		keys[key] = action != GLFW_RELEASE;
+		if(action == GLFW_RELEASE){
+			System.out.println("Key Released");
+			pKeys[key] = true;
+		}
 	}
 
 	public static boolean isKeyDown(int keycode) {
@@ -24,7 +29,7 @@ public class Input extends GLFWKeyCallback{
 	}
 	
 	public static boolean isKeyUp(int keycode){
-		return keys[keycode];
+		return pKeys[keycode];
 	}
 	
 	

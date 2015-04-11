@@ -26,13 +26,13 @@ public class Camera {
 
 	public void setPosition(Vector3f pos){
 		this.position.x = pos.x + offset.x;
-		this.position.y = pos.y + offset.y;
-		this.position.z = pos.z + offset.z;
+//		this.position.y = pos.y + offset.y;
+		this.position.z = pos.z + offset.z; 
 	}
 	
 
 	public void update(){
-	
+		
 	}
 
 
@@ -41,6 +41,11 @@ public class Camera {
 		Shader.shader1.setUniformMat4f("vw_matrix", Matrix4f.translate(
 				new Vector3f(-position.x, -position.y, -position.z)));	
 		Shader.shader1.disable();
+		Shader.shader2.enable();
+		Shader.shader2.setUniformMat4f("vw_matrix", Matrix4f.translate(
+				new Vector3f(-position.x, -position.y, -position.z)));	
+		Shader.shader2.enable();
+		
 	}
 	
 }

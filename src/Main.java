@@ -110,13 +110,20 @@ public class Main implements Runnable{
 		game = new Game();
 		
 		Shader.shader1.enable();
+//		Shader.shader2.enable();
 		Matrix4f pr_matrix = Matrix4f.orthographic(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
 	
 		Shader.shader1.setUniformMat4f("pr_matrix", pr_matrix);
 		Shader.shader1.setUniform1i("tex", 1);
 		
+//		Shader.shader2.disable();
 		Shader.shader1.disable();
+		Shader.shader2.enable();
 		
+		Shader.shader2.setUniformMat4f("pr_matrix", pr_matrix);
+		Shader.shader2.setUniform1i("tex", 1);
+		
+		Shader.shader2.disable();
 		
 		
 		

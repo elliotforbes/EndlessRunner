@@ -1,5 +1,6 @@
 package Game;
 
+import Graphics.Shader;
 import Math.Matrix4f;
 import Math.Vector3f;
 
@@ -7,7 +8,7 @@ public class Game {
 	
 	public Camera camera = new Camera();
 	
-	public Tile tile;
+	public Tile[] tile;
 	public Coin[] coins = new Coin[5];
 	public Player player1;
 	
@@ -21,7 +22,12 @@ public class Game {
 			coins[i].translate(new Vector3f(i * 1.7f, 0.0f ,0.0f));
 		}
 		
-		tile = new Tile();
+		
+		tile = new Tile[20];
+		for(int i = 0; i<20; i++){
+			tile[i] = new Tile();
+			tile[i].translate(new Vector3f(-10.0f + (i * 1.7f), -4.8f, 0.0f));
+		}
 		player1 = new Player();
 		player1.translate(new Vector3f(-8.0f, -3.6f, 0.0f));
 //		camera.setPosition();
@@ -44,8 +50,8 @@ public class Game {
 				// values being added to playerW and playerH
 				float playerX = player1.position.x;
 				float playerY = player1.position.y;
-				float playerW = player1.position.x + 1.0f;
-				float playerH = player1.position.y + 1.0f;
+				float playerW = player1.position.x + 1.25f;
+				float playerH = player1.position.y + 1.25f;
 				
 				// Gets our coins box coordinates
 				// we'll be comparing these 2 boxes
@@ -82,19 +88,25 @@ public class Game {
 			System.out.println("COLLISION");
 		}
 		
-		tile.update();
 		player1.update();
 		camera.setPosition(player1.position);
-		
+		for(int i = 0; i < 20; i++)
+			tile[i].update();
 		for(int i = 0; i<coins.length; i++)
 			coins[i].update();
 	}
 	
 	public void render(){
-
+				
 		camera.render();
-		tile.render();
 		player1.render();
+		// Used for lighting later on.
+		//		Shader.shader2.enable();
+//		Shader.shader2.setUniform2f("Player", player1.position.x, player1.position.y);
+//		Shader.shader2.disable();
+		for(int i = 0; i < 20; i++)
+			tile[i].render();
+		
 		for(int i = 0; i<coins.length; i++){
 			if(coins[i].alive)
 				coins[i].render();

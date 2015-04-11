@@ -54,9 +54,11 @@ public class Player extends GameObject{
 	
 	public boolean checkFloorCollision(){
 		if(position.y <= 3.0f){
+			jumping = false;
 			return true;
 		}
 		else {
+			jumping = true;
 			return false;
 		}
 	}
@@ -73,32 +75,36 @@ public class Player extends GameObject{
 				
 	}
 	
+	public void gravity(){
+		position.y -= 0.01f;
+	}
+	
 	@Override
 	public void update(){
 		position.y -= delta.y;
 		position.x -= delta.x;
 		
 		
-   		if(position.y <= -2.75f){
-			position.y = -2.75f;
+   		if(position.y <= -3.00f){
+			position.y = -3.00f;
    			animState = 0;
-		}
+   			jumping = false;
+   		}
 		if(Input.isKeyDown(GLFW_KEY_SPACE)){
-			delta.y = -0.15f;
-			animState = 2;
-			jumping = true;
+			if(!jumping){
+				delta.y = -0.15f;
+				jumping = true;
+			} else {
+				System.out.println("Already jumping");
+			}
 		}
 		else if(Input.isKeyDown(GLFW_KEY_D)){
 			delta.x = -0.15f;
-			idle = false;
-			running = true;
-			animState = 1;
+			delta.y += 0.01f;
 		}
 		else if(Input.isKeyDown(GLFW_KEY_A)){
 			delta.x = 0.15f;
-			idle = false;
-			running = true;
-			animState = 1;  
+			delta.y += 0.01f;
 		}
 		else{
 //			animState = 0;
